@@ -71,19 +71,6 @@ With it, everything becomes readable.</textarea>
     </div>
   </div>
 
-  <div class="card roman">
-    <span class="badge">📐 The Maths</span>
-    <h2>How the Shift Works</h2>
-    <div class="explanation">
-      <p>The Caesar cipher is one of the oldest encryption techniques. Each letter in the alphabet is replaced by a letter a fixed number of positions away.</p>
-      <div class="maths-formula" id="math-formula">E(x) = (x + 7) mod 26</div>
-      <p>Where <code>x</code> is the position of a letter in the alphabet (A=0, B=1, ..., Z=25), and <code>n</code> is your chosen shift. The <code>mod 26</code> wraps around at the end of the alphabet.</p>
-      <p>The custom font applies the <em>inverse</em> shift. When the browser sees an encrypted letter, it draws the glyph of the original letter instead.</p>
-    </div>
-    <h3 style="margin-top:1.5rem">Alphabet Mapping</h3>
-    <div class="alphabet-table" id="alphabet-table"></div>
-  </div>
-
   <div class="card">
     <span class="badge">🛠️ Try It Yourself</span>
     <h2>Curl Command</h2>
@@ -97,6 +84,19 @@ With it, everything becomes readable.</textarea>
     <div class="btn-group">
       <a href="demo.html" class="btn">🔒 View the Encrypted Demo</a>
     </div>
+  </div>
+
+  <div class="card roman">
+    <span class="badge">📐 The Maths</span>
+    <h2>How the Shift Works</h2>
+    <div class="explanation">
+      <p>The Caesar cipher is one of the oldest encryption techniques. Each letter in the alphabet is replaced by a letter a fixed number of positions away.</p>
+      <div class="maths-formula" id="math-formula">E(x) = (x + 7) mod 26</div>
+      <p>Where <code>x</code> is the position of a letter in the alphabet (A=0, B=1, ..., Z=25), and <code>n</code> is your chosen shift. The <code>mod 26</code> wraps around at the end of the alphabet.</p>
+      <p>The custom font applies the <em>inverse</em> shift. When the browser sees an encrypted letter, it draws the glyph of the original letter instead.</p>
+    </div>
+    <h3 style="margin-top:1.5rem">Alphabet Mapping</h3>
+    <div class="alphabet-table" id="alphabet-table"></div>
   </div>
 
   <div class="card">
