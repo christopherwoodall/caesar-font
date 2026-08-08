@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Caesar Cipher Font — Generator</title>
+<meta name="description" content="Create a custom web font that encrypts your text in plain sight. The browser reads the message, but curl sees only nonsense.">
+<meta property="og:title" content="Caesar Cipher Font">
+<meta property="og:description" content="Create a custom web font that encrypts your text in plain sight. The browser reads the message, but curl sees only nonsense.">
+<meta property="og:image" content="https://christopherwoodall.github.io/caesar-font/assets/preview.png">
+<meta property="og:url" content="https://christopherwoodall.github.io/caesar-font/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -46,6 +52,10 @@ With it, everything becomes readable.</textarea>
         <h4>🔒 Encrypted Source</h4>
         <div class="content cipher" id="cipher-preview"></div>
       </div>
+      <div class="preview-panel">
+        <h4>🔤 Raw Encrypted (what curl sees)</h4>
+        <div class="content raw-encrypted" id="raw-preview"></div>
+      </div>
     </div>
 
     <div class="btn-group">
@@ -62,12 +72,40 @@ With it, everything becomes readable.</textarea>
   </div>
 
   <div class="card roman">
+    <span class="badge">📐 The Maths</span>
+    <h2>How the Shift Works</h2>
+    <div class="explanation">
+      <p>The Caesar cipher is one of the oldest encryption techniques. Each letter in the alphabet is replaced by a letter a fixed number of positions away.</p>
+      <div class="maths-formula" id="math-formula">E(x) = (x + 7) mod 26</div>
+      <p>Where <code>x</code> is the position of a letter in the alphabet (A=0, B=1, ..., Z=25), and <code>n</code> is your chosen shift. The <code>mod 26</code> wraps around at the end of the alphabet.</p>
+      <p>The custom font applies the <em>inverse</em> shift. When the browser sees an encrypted letter, it draws the glyph of the original letter instead.</p>
+    </div>
+    <h3 style="margin-top:1.5rem">Alphabet Mapping</h3>
+    <div class="alphabet-table" id="alphabet-table"></div>
+  </div>
+
+  <div class="card">
+    <span class="badge">🛠️ Try It Yourself</span>
+    <h2>Curl Command</h2>
+    <div class="explanation">
+      <p>The <a href="demo.html">demo page</a> is a fully encrypted HTML document. View its source or run this command to see what the server actually sends:</p>
+    </div>
+    <pre><code>curl -s https://christopherwoodall.github.io/caesar-font/demo.html | grep -A 20 '&lt;p class="cipher"&gt;'</code></pre>
+    <div class="explanation" style="margin-top:1rem">
+      <p>The output is pure ciphertext. The browser uses the custom font to map each scrambled letter back to its original glyph. The font is the decryption key.</p>
+    </div>
+    <div class="btn-group">
+      <a href="demo.html" class="btn">🔒 View the Encrypted Demo</a>
+    </div>
+  </div>
+
+  <div class="card">
     <span class="badge">ℹ️ How It Works</span>
     <h2>The Mechanism</h2>
-    <p class="plaintext">This tool encrypts your text by shifting every letter forward in the alphabet. Then it creates a custom font that shifts every glyph <em>backward</em> by the same amount. The result: the browser renders readable text from an unreadable source.</p>
-    <p class="plaintext">The HTML source contains ciphertext. The font file is the decryption key. Without it, the page is pure nonsense. With it, the message appears as if by magic. This is steganography through typography.</p>
-    <div class="btn-group">
-      <a href="demo.html" class="btn btn-secondary">👀 View Demo</a>
+    <div class="explanation">
+      <p>Web fonts are powerful. A font file contains a table that maps Unicode characters to glyph outlines. By editing that table, we can say: "when the browser sees the letter <code>A</code>, draw the shape of <code>H</code> instead." We do this for every letter, shifting by a fixed amount.</p>
+      <p>The HTML contains the shifted text. The font contains the reverse shift. Together they cancel out, revealing the hidden message. The source remains encrypted for anyone who does not have the font file.</p>
+      <p>This is a playful demonstration of how presentation and content can be separated. What you see is not always what you get.</p>
     </div>
   </div>
 
@@ -89,10 +127,13 @@ With it, everything becomes readable.</textarea>
   const statShifted = document.getElementById('stat-shifted');
   const plaintextPreview = document.getElementById('plaintext-preview');
   const cipherPreview = document.getElementById('cipher-preview');
+  const rawPreview = document.getElementById('raw-preview');
   const randomBtn = document.getElementById('random-btn');
   const downloadBtn = document.getElementById('download-font-btn');
   const copyBtn = document.getElementById('copy-text-btn');
   const generateBtn = document.getElementById('generate-page-btn');
+  const mathFormula = document.getElementById('math-formula');
+  const alphabetTable = document.getElementById('alphabet-table');
 
   let currentShift = 7;
   let currentFontFace = null;
@@ -104,22 +145,34 @@ With it, everything becomes readable.</textarea>
     });
   }
 
+  function updateAlphabetTable(shift) {
+    const plain = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const cipher = caesarShift(plain, shift);
+    alphabetTable.innerHTML = '';
+    for (let i = 0; i < 26; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.innerHTML = '<span class="plain">' + plain[i] + '</span><span class="arrow">→</span><span class="shifted">' + cipher[i] + '</span>';
+      alphabetTable.appendChild(cell);
+    }
+  }
+
   function updateFont() {
     const shift = parseInt(slider.value, 10);
     currentShift = shift;
     shiftValue.textContent = shift;
     statShift.textContent = shift;
+    mathFormula.textContent = 'E(x) = (x + ' + shift + ') mod 26';
+    updateAlphabetTable(shift);
 
-    // Load cipher font for preview
     if (currentFontFace) {
       document.fonts.delete(currentFontFace);
     }
-    currentFontFace = new FontFace('CaesarLora', `url(assets/fonts/caesar-shift-${shift}.woff2)`);
+    currentFontFace = new FontFace('CaesarLora', 'url(assets/fonts/caesar-shift-' + shift + '.woff2)');
     document.fonts.add(currentFontFace);
     currentFontFace.load().then(function() {
       updatePreview();
     }).catch(function() {
-      // Fallback: update preview anyway
       updatePreview();
     });
   }
@@ -129,17 +182,18 @@ With it, everything becomes readable.</textarea>
     const encrypted = caesarShift(text, currentShift);
     plaintextPreview.textContent = text || 'Type something to see the preview...';
     cipherPreview.textContent = encrypted || '...';
+    rawPreview.textContent = encrypted || '...';
     statChars.textContent = text.length;
     statShifted.textContent = (text.match(/[a-zA-Z]/g) || []).length;
   }
 
   function downloadFont() {
     const shift = currentShift;
-    const url = `assets/fonts/caesar-shift-${shift}.woff2`;
+    const url = 'assets/fonts/caesar-shift-' + shift + '.woff2';
     fetch(url).then(function(r) { return r.blob(); }).then(function(blob) {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `caesar-cipher-shift-${shift}.woff2`;
+      a.download = 'caesar-cipher-shift-' + shift + '.woff2';
       a.click();
       URL.revokeObjectURL(a.href);
     });
@@ -158,47 +212,9 @@ With it, everything becomes readable.</textarea>
     const text = textarea.value;
     const encrypted = caesarShift(text, shift);
 
-    const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caesar Cipher — Shift ${shift}</title>
-<style>
-  *,*::before,*::after{box-sizing:border-box;margin:0}
-  body{
-    background:#0a0a12;
-    color:#e8e8f0;
-    font-family:system-ui,sans-serif;
-    line-height:1.6;
-    padding:2rem;
-    max-width:720px;
-    margin:0 auto;
-  }
-  @font-face{
-    font-family:"CaesarLora";
-    src:url(data:font/woff2;base64,[[FONT_BASE64]]) format("woff2");
-    font-weight:400;
-    font-style:normal;
-  }
-  .cipher{
-    font-family:"CaesarLora",serif;
-    font-size:1.25rem;
-    white-space:pre-wrap;
-  }
-  a{color:#00f0ff}
-</style>
-</head>
-<body>
-  <p class="cipher">${encrypted.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
-  <footer style="margin-top:2rem;font-size:.8rem;color:rgba(232,232,240,.4)">
-    <p>Encrypted with Caesar Cipher Font. Shift: ${shift}.</p>
-    <p>Font: <a href="https://fonts.google.com/specimen/Lora" target="_blank" rel="noopener">Lora</a> by Cyreal, SIL OFL 1.1.</p>
-  </footer>
-</body>
-</html>`;
+    const html = '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>Caesar Cipher — Shift ' + shift + '</title>\n<style>\n  *,*::before,*::after{box-sizing:border-box;margin:0}\n  body{\n    background:#0a0a12;\n    color:#e8e8f0;\n    font-family:system-ui,sans-serif;\n    line-height:1.6;\n    padding:2rem;\n    max-width:720px;\n    margin:0 auto;\n  }\n  @font-face{\n    font-family:"CaesarLora";\n    src:url(data:font/woff2;base64,[[FONT_BASE64]]) format("woff2");\n    font-weight:400;\n    font-style:normal;\n  }\n  .cipher{\n    font-family:"CaesarLora",serif;\n    font-size:1.25rem;\n    white-space:pre-wrap;\n  }\n  a{color:#00f0ff}\n</style>\n</head>\n<body>\n  <p class="cipher">' + encrypted.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</p>\n  <footer style="margin-top:2rem;font-size:.8rem;color:rgba(232,232,240,.4)">\n    <p>Encrypted with Caesar Cipher Font. Shift: ' + shift + '.</p>\n    <p>Font: <a href="https://fonts.google.com/specimen/Lora" target="_blank" rel="noopener">Lora</a> by Cyreal, SIL OFL 1.1.</p>\n  </footer>\n</body>\n</html>';
 
-    fetch(`assets/fonts/caesar-shift-${shift}.woff2`)
+    fetch('assets/fonts/caesar-shift-' + shift + '.woff2')
       .then(function(r) { return r.arrayBuffer(); })
       .then(function(buf) {
         const base64 = btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
@@ -206,7 +222,7 @@ With it, everything becomes readable.</textarea>
         const blob = new Blob([finalHtml], {type: 'text/html'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `caesar-cipher-page-shift-${shift}.html`;
+        a.download = 'caesar-cipher-page-shift-' + shift + '.html';
         a.click();
         URL.revokeObjectURL(a.href);
       });

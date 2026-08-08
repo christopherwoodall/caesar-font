@@ -342,3 +342,70 @@ footer a:hover{color:#00f0ff}
 @media(max-width:720px){
   .hero h1{font-size:2rem}
 }
+
+/* ─── Maths & Alphabet Table ─── */
+.maths-formula{
+  font-family:"SF Mono",monospace;
+  font-size:1.1rem;
+  color:#00f0ff;
+  background:rgba(0,240,255,.06);
+  border:1px solid rgba(0,240,255,.15);
+  border-radius:10px;
+  padding:1rem 1.5rem;
+  display:inline-block;
+  margin:1rem 0;
+  text-shadow:0 0 10px rgba(0,240,255,.2);
+}
+
+.alphabet-table{
+  display:grid;
+  grid-template-columns:repeat(13,1fr);
+  gap:.35rem;
+  margin-top:1rem;
+  font-family:monospace;
+  font-size:.82rem;
+}
+.alphabet-table .cell{
+  background:rgba(0,0,0,.2);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:6px;
+  padding:.4rem .2rem;
+  text-align:center;
+  color:rgba(232,232,240,.7);
+}
+.alphabet-table .cell .plain{
+  display:block;
+  font-weight:700;
+  color:#00f0ff;
+  font-size:.9rem;
+}
+.alphabet-table .cell .arrow{
+  display:block;
+  font-size:.65rem;
+  color:rgba(232,232,240,.4);
+  margin:1px 0;
+}
+.alphabet-table .cell .cipher{
+  display:block;
+  font-weight:700;
+  color:#ff00a0;
+  font-size:.9rem;
+}
+
+@media(max-width:720px){
+  .alphabet-table{grid-template-columns:repeat(7,1fr)}
+}
+
+/* ─── Explanation text ─── */
+.explanation p{
+  color:rgba(232,232,240,.85);
+  margin-bottom:1rem;
+}
+.explanation p:last-child{margin-bottom:0}
+.explanation code{
+  background:rgba(0,0,0,.2);
+  padding:.15rem .4rem;
+  border-radius:4px;
+  color:#ffb7c5;
+  font-size:.85em;
+}

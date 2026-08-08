@@ -119,11 +119,87 @@ def build_cipher_font(src: Path, dest: Path, shift: int) -> None:
     print(f"  Shift {shift:2d} -> {dest.name} ({size:,} bytes)")
 
 
+def generate_preview_image(font_path: Path, dest: Path) -> None:
+    """Generate a 1200x630 social preview PNG."""
+    from PIL import Image, ImageDraw, ImageFont
+
+    width, height = 1200, 630
+    bg = "#0a0a12"
+    cyan = "#00f0ff"
+    magenta = "#ff00a0"
+    gold = "#c9a227"
+    white = "#e8e8f0"
+    grid = "#0d1f2d"  # Very subtle grid color
+
+    img = Image.new("RGB", (width, height), bg)
+    draw = ImageDraw.Draw(img)
+
+    # Load font at different sizes
+    try:
+        title_font = ImageFont.truetype(str(font_path), 96)
+        subtitle_font = ImageFont.truetype(str(font_path), 48)
+        detail_font = ImageFont.truetype(str(font_path), 32)
+        arrow_font = ImageFont.truetype(str(font_path), 64)
+    except Exception:
+        title_font = ImageFont.load_default()
+        subtitle_font = detail_font = arrow_font = title_font
+
+    # Draw subtle grid lines
+    for x in range(0, width, 60):
+        draw.line([(x, 0), (x, height)], fill=grid, width=1)
+    for y in range(0, height, 60):
+        draw.line([(0, y), (width, y)], fill=grid, width=1)
+
+    # Title
+    title = "Caesar Cipher Font"
+    bbox = draw.textbbox((0, 0), title, font=title_font)
+    tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
+    tx = (width - tw) // 2
+    ty = 160
+    # Glow effect
+    for offset in range(10, 0, -2):
+        alpha = int(30 - offset * 3)
+        glow_color = (0, max(0, 240 - alpha), 255 - alpha)
+        draw.text((tx, ty), title, font=title_font, fill=glow_color)
+    draw.text((tx, ty), title, font=title_font, fill=cyan)
+
+    # Arrow line: A -> H (example shift)
+    arrow_text = "A  ->  H"
+    abox = draw.textbbox((0, 0), arrow_text, font=arrow_font)
+    aw = abox[2] - abox[0]
+    ax = (width - aw) // 2
+    ay = ty + th + 50
+    draw.text((ax, ay), arrow_text, font=arrow_font, fill=gold)
+
+    # Subtitle
+    subtitle = "The font is the key"
+    sbbox = draw.textbbox((0, 0), subtitle, font=subtitle_font)
+    sw = sbbox[2] - sbbox[0]
+    sx = (width - sw) // 2
+    sy = ay + 90
+    draw.text((sx, sy), subtitle, font=subtitle_font, fill=magenta)
+
+    # Detail line
+    detail = "Encrypt text in plain sight. The browser reads it. curl sees nonsense."
+    dbbox = draw.textbbox((0, 0), detail, font=detail_font)
+    dw = dbbox[2] - dbbox[0]
+    dx = (width - dw) // 2
+    dy = sy + 70
+    draw.text((dx, dy), detail, font=detail_font, fill=white)
+
+    img.save(str(dest), "PNG")
+    print(f"Preview image saved to {dest} ({dest.stat().st_size:,} bytes)")
+
+
 def main() -> None:
-    if DOCS_DIR.exists():
-        shutil.rmtree(DOCS_DIR)
-    FONTS_DIR.mkdir(parents=True)
-    CSS_DIR.mkdir(parents=True)
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    ASSETS_DIR.mkdir(parents=True, exist_ok=True)
+    FONTS_DIR.mkdir(parents=True, exist_ok=True)
+    CSS_DIR.mkdir(parents=True, exist_ok=True)
+    # Only clean fonts, preserve HTML/CSS and preview image
+    for f in FONTS_DIR.glob("*.woff2"):
+        f.unlink()
 
     tmp = Path(tempfile.gettempdir())
     raw_var = tmp / "lora-variable.ttf"
@@ -140,6 +216,10 @@ def main() -> None:
 
     total = sum(f.stat().st_size for f in FONTS_DIR.glob("*.woff2"))
     print(f"\nTotal font assets: {total:,} bytes ({total/1024:.1f} KB)")
+
+    # Generate preview image using the static TTF (better for Pillow)
+    print("\nGenerating social preview image...")
+    generate_preview_image(raw_static, ASSETS_DIR / "preview.png")
 
     print("\nBuild complete!")
 

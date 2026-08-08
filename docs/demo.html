@@ -4,64 +4,46 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Caesar Cipher Font — Demo</title>
+<meta property="og:title" content="Caesar Cipher Font">
+<meta property="og:description" content="What you see is not always what you get.">
+<meta property="og:image" content="https://christopherwoodall.github.io/caesar-font/assets/preview.png">
+<meta property="og:url" content="https://christopherwoodall.github.io/caesar-font/demo.html">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/css/style.css">
+<style>
+.demo-body{max-width:720px;margin:0 auto;padding:3rem 1.5rem}
+.demo-body .cipher{font-size:1.35rem;line-height:1.8}
+.demo-body h2.cipher{font-size:2rem;font-weight:700;margin-top:2.5rem;margin-bottom:1rem;color:#00f0ff;text-shadow:0 0 18px rgba(0,240,255,.35)}
+.back-link{text-align:center;margin-top:3rem}
+.back-link a{font-size:.9rem;color:rgba(232,232,240,.5);border-bottom:none}
+.back-link a:hover{color:#00f0ff}
+</style>
 </head>
 <body>
-<div class="container">
-  <div class="hero">
-    <h1>Caesar Cipher Font</h1>
-    <p>What you see is not always what you get.</p>
-  </div>
-
-  <div class="card">
-    <span class="badge">👀 What curl sees</span>
-    <h2>Encrypted Source</h2>
-    <p style="color:rgba(232,232,240,.7);margin-bottom:1rem">
-      This is the raw HTML source. No special font is loaded here. Every letter you see below is literally what is stored in the file.
-    </p>
-    <pre><code>Dlsjvtl av aol Jhlzhy Jpwoly Mvua.
-
+<div class="demo-body">
+  <h2 class="cipher">Dlsjvtl av aol Jhlzhy Jpwoly Mvua</h2>
+  <p class="cipher">
 Aopz whnl pz lujyfwalk pu wshpu zpnoa.
 Pm fvb cpld aol zvbyjl vm aopz OATS mpsl, fvb dpss zll zjyhtislk slaalyz.
 Iba fvby iyvdzly pz bzpun h zwljphs mvua aoha zopmaz lclyf nsfwo if zlclu wshjlz pu aol hswohila.
-
+  </p>
+  <p class="cipher">
 Aol mvua pz aol rlf.
 Dpaovba pa, aol alea pz uvuzluzl.
 Dpao pa, lclyfaopun iljvtlz ylhkhisl.
-
+  </p>
+  <p class="cipher">
 Aopz pz h wshfmbs kltvuzayhapvu vm ovd wylzluahapvu huk jvualua jhu il zlwhyhalk.
-Doha fvb zll pz uva hsdhfz doha fvb nla.</code></pre>
+Doha fvb zll pz uva hsdhfz doha fvb nla.
+  </p>
+  <p class="cipher">
+Pm fvb cpld aol zvbyjl, fvb dpss zll aol lujyfwalk alea.
+Pm fvb cpld aol mvua, fvb dpss zll aol ylhkhisl alea.
+Aol mvua pz aol wshjla rlf.
+  </p>
+  <div class="back-link">
+    <a href="index.html">&#8592; Pualyupun aol Jpwoly</a>
   </div>
-
-  <div class="card roman">
-    <span class="badge">🛠️ Try it yourself</span>
-    <h2>Curl Command</h2>
-    <pre><code>curl -s https://christopherwoodall.github.io/caesar-font/index.html | grep -A 20 '&lt;p class="cipher"&gt;'</code></pre>
-    <p style="color:rgba(232,232,240,.7);margin-top:1rem">
-      The output will look exactly like the encrypted text above. The browser on the <a href="index.html">live page</a> uses a custom font to map those scrambled letters back into readable glyphs.
-    </p>
-    <div class="btn-group">
-      <a href="index.html" class="btn">🔐 Try the Generator</a>
-    </div>
-  </div>
-
-  <div class="card">
-    <span class="badge">📖 Explanation</span>
-    <h2>Why This Works</h2>
-    <p style="color:rgba(232,232,240,.85)">
-      Web fonts are powerful. A font file contains a table that maps Unicode characters to glyph outlines. By editing that table, we can say: "when the browser sees the letter <code>A</code>, draw the shape of <code>H</code> instead." We do this for every letter, shifting by a fixed amount.
-    </p>
-    <p style="color:rgba(232,232,240,.85)">
-      The HTML contains the shifted text. The font contains the reverse shift. Together they cancel out, revealing the hidden message. The source remains encrypted for anyone who does not have the font file.
-    </p>
-  </div>
-
-  <footer>
-    <p><a href="index.html">← Back to the Generator</a></p>
-    <div class="attribution">
-      <p>Base font: <a href="https://fonts.google.com/specimen/Lora" target="_blank" rel="noopener">Lora</a> by Cyreal, licensed under the <a href="https://scripts.sil.org/OFL" target="_blank" rel="noopener">SIL Open Font License 1.1</a>.</p>
-    </div>
-  </footer>
 </div>
 </body>
 </html>
