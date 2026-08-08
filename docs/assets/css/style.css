@@ -1,0 +1,191 @@
+/* ─── Reset & Base ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0}
+html,body{min-height:100vh}
+body{
+  background:#0a0a0f;
+  color:#e8e6f0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── Cyberpunk Grid Overlay ─── */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background-image:
+    linear-gradient(rgba(0,240,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,240,255,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
+}
+
+/* ─── Scanlines ─── */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,.15) 2px,
+    rgba(0,0,0,.15) 4px
+  );
+  opacity:.3;
+}
+
+/* ─── Typography ─── */
+@font-face{
+  font-family:"CaesarLora";
+  src:url("../fonts/caesar-lora.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+
+.cipher{
+  font-family:"CaesarLora",serif;
+  font-size:1.25rem;
+  color:#f0eef5;
+  text-shadow:0 0 12px rgba(0,240,255,.25),0 0 2px rgba(0,240,255,.1);
+}
+
+h1,h2,h3{
+  font-family:system-ui,sans-serif;
+  font-weight:700;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  color:#00f0ff;
+  text-shadow:0 0 20px rgba(0,240,255,.4),0 0 4px rgba(0,240,255,.2);
+  margin-bottom:1rem;
+}
+
+h1{font-size:2.5rem}
+h2{font-size:1.75rem;color:#ff00a0;text-shadow:0 0 20px rgba(255,0,160,.4)}
+
+/* ─── Layout ─── */
+.container{
+  position:relative;
+  z-index:2;
+  max-width:720px;
+  margin:0 auto;
+  padding:3rem 1.5rem;
+}
+
+.card{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(0,240,255,.15);
+  border-radius:18px;
+  padding:2rem;
+  margin-bottom:2rem;
+  backdrop-filter:blur(4px);
+  box-shadow:0 8px 32px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.05);
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(circle,rgba(255,183,197,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+/* ─── Roman Column Accents ─── */
+.card.roman{
+  border-left:4px solid #c9a227;
+  border-image:linear-gradient(to bottom,#c9a227,#ff00a0) 1;
+}
+
+/* ─── Kawaii Badges ─── */
+.badge{
+  display:inline-block;
+  background:linear-gradient(135deg,#ffb7c5,#d8b4fe);
+  color:#0a0a0f;
+  font-size:.75rem;
+  font-weight:700;
+  padding:.25rem .75rem;
+  border-radius:999px;
+  margin-bottom:1rem;
+  text-shadow:none;
+  box-shadow:0 2px 8px rgba(255,183,197,.3);
+}
+
+/* ─── Code / Pre ─── */
+pre,code{
+  font-family:"SF Mono",Monaco,Inconsolata,"Fira Code",monospace;
+  font-size:.9rem;
+}
+
+pre{
+  background:rgba(0,0,0,.4);
+  border:1px solid rgba(255,0,160,.2);
+  border-radius:12px;
+  padding:1rem;
+  overflow-x:auto;
+  color:#ffb7c5;
+  box-shadow:inset 0 0 20px rgba(255,0,160,.05);
+}
+
+/* ─── Links ─── */
+a{
+  color:#00f0ff;
+  text-decoration:none;
+  border-bottom:1px solid rgba(0,240,255,.3);
+  transition:all .2s;
+}
+a:hover{
+  color:#ffb7c5;
+  border-bottom-color:#ffb7c5;
+  text-shadow:0 0 12px rgba(255,183,197,.4);
+}
+
+/* ─── Buttons ─── */
+.btn{
+  display:inline-block;
+  background:linear-gradient(135deg,#00f0ff,#ff00a0);
+  color:#0a0a0f;
+  font-weight:700;
+  padding:.75rem 1.5rem;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  text-shadow:none;
+  box-shadow:0 4px 16px rgba(0,240,255,.3);
+  transition:transform .15s,box-shadow .15s;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 24px rgba(0,240,255,.4);
+}
+
+/* ─── Toggle ─── */
+.raw-mode .cipher{
+  font-family:monospace;
+  color:#ff00a0;
+  text-shadow:0 0 12px rgba(255,0,160,.4);
+}
+
+/* ─── Footer ─── */
+footer{
+  text-align:center;
+  padding:2rem 0;
+  font-size:.8rem;
+  color:rgba(232,230,240,.4);
+}
+
+/* ─── Responsive ─── */
+@media(max-width:600px){
+  h1{font-size:1.75rem}
+  .cipher{font-size:1.1rem}
+  .card{padding:1.5rem}
+}

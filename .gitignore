@@ -134,3 +134,13 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Python
+.venv/
+*.egg-info/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Build artifacts (generated on demand, keep docs/ for GitHub Pages)
+# docs/ is intentionally kept for GitHub Pages deployment

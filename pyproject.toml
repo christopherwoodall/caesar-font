@@ -1,0 +1,17 @@
+[project]
+name = "caesar-font"
+version = "0.1.0"
+description = "A Caesar cipher font demo for GitHub Pages"
+requires-python = ">=3.10"
+dependencies = [
+    "fonttools>=4.53.1",
+    "requests>=2.32.3",
+    "brotli>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = []
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
