@@ -8,10 +8,15 @@
 </head>
 <body>
 <div class="container">
+  <div class="hero">
+    <h1>Caesar Cipher Font</h1>
+    <p>What you see is not always what you get.</p>
+  </div>
+
   <div class="card">
     <span class="badge">👀 What curl sees</span>
-    <h1>Encrypted Source</h1>
-    <p style="color:rgba(232,230,240,.7);margin-bottom:1rem">
+    <h2>Encrypted Source</h2>
+    <p style="color:rgba(232,232,240,.7);margin-bottom:1rem">
       This is the raw HTML source. No special font is loaded here. Every letter you see below is literally what is stored in the file.
     </p>
     <pre><code>Dlsjvtl av aol Jhlzhy Jpwoly Mvua.
@@ -25,29 +30,37 @@ Dpaovba pa, aol alea pz uvuzluzl.
 Dpao pa, lclyfaopun iljvtlz ylhkhisl.
 
 Aopz pz h wshfmbs kltvuzayhapvu vm ovd wylzluahapvu huk jvualua jhu il zlwhyhalk.
-Doha fvb zll pz uva hsdhfz doha fvb nla.
-</code></pre>
+Doha fvb zll pz uva hsdhfz doha fvb nla.</code></pre>
   </div>
+
   <div class="card roman">
     <span class="badge">🛠️ Try it yourself</span>
     <h2>Curl Command</h2>
-    <pre><code>curl -s https://your-username.github.io/caesar-font/index.html | grep -A 20 '&lt;p class="cipher"&gt;'</code></pre>
-    <p style="color:rgba(232,230,240,.7);margin-top:1rem">
+    <pre><code>curl -s https://christopherwoodall.github.io/caesar-font/index.html | grep -A 20 '&lt;p class="cipher"&gt;'</code></pre>
+    <p style="color:rgba(232,232,240,.7);margin-top:1rem">
       The output will look exactly like the encrypted text above. The browser on the <a href="index.html">live page</a> uses a custom font to map those scrambled letters back into readable glyphs.
     </p>
+    <div class="btn-group">
+      <a href="index.html" class="btn">🔐 Try the Generator</a>
+    </div>
   </div>
+
   <div class="card">
     <span class="badge">📖 Explanation</span>
     <h2>Why This Works</h2>
-    <p>
+    <p style="color:rgba(232,232,240,.85)">
       Web fonts are powerful. A font file contains a table that maps Unicode characters to glyph outlines. By editing that table, we can say: "when the browser sees the letter <code>A</code>, draw the shape of <code>H</code> instead." We do this for every letter, shifting by a fixed amount.
     </p>
-    <p>
+    <p style="color:rgba(232,232,240,.85)">
       The HTML contains the shifted text. The font contains the reverse shift. Together they cancel out, revealing the hidden message. The source remains encrypted for anyone who does not have the font file.
     </p>
   </div>
+
   <footer>
-    <p><a href="index.html">← View the live decrypted page</a></p>
+    <p><a href="index.html">← Back to the Generator</a></p>
+    <div class="attribution">
+      <p>Base font: <a href="https://fonts.google.com/specimen/Lora" target="_blank" rel="noopener">Lora</a> by Cyreal, licensed under the <a href="https://scripts.sil.org/OFL" target="_blank" rel="noopener">SIL Open Font License 1.1</a>.</p>
+    </div>
   </footer>
 </div>
 </body>

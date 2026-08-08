@@ -2,14 +2,14 @@
 *,*::before,*::after{box-sizing:border-box;margin:0}
 html,body{min-height:100vh}
 body{
-  background:#0a0a0f;
-  color:#e8e6f0;
+  background:#0a0a12;
+  color:#e8e8f0;
   font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
 
-/* ─── Cyberpunk Grid Overlay ─── */
+/* ─── Grid Overlay ─── */
 body::before{
   content:"";
   position:fixed;
@@ -17,175 +17,328 @@ body::before{
   pointer-events:none;
   z-index:0;
   background-image:
-    linear-gradient(rgba(0,240,255,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,240,255,.03) 1px,transparent 1px);
-  background-size:40px 40px;
-  mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 20%,black 80%,transparent 100%);
-}
-
-/* ─── Scanlines ─── */
-body::after{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
-  background:repeating-linear-gradient(
-    0deg,
-    transparent 0px,
-    transparent 2px,
-    rgba(0,0,0,.15) 2px,
-    rgba(0,0,0,.15) 4px
-  );
-  opacity:.3;
+    linear-gradient(rgba(0,240,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,240,255,.04) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(to bottom,transparent 0%,black 15%,black 85%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 15%,black 85%,transparent 100%);
 }
 
 /* ─── Typography ─── */
 @font-face{
-  font-family:"CaesarLora";
-  src:url("../fonts/caesar-lora.woff2") format("woff2");
+  font-family:"Lora";
+  src:url("../fonts/lora-base.woff2") format("woff2");
   font-weight:400;
   font-style:normal;
   font-display:swap;
 }
 
-.cipher{
+@font-face{
+  font-family:"CaesarLora";
+  src:url("../fonts/caesar-shift-7.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+
+.cipher,.cipher-preview{
   font-family:"CaesarLora",serif;
-  font-size:1.25rem;
+  font-size:1.15rem;
   color:#f0eef5;
-  text-shadow:0 0 12px rgba(0,240,255,.25),0 0 2px rgba(0,240,255,.1);
+  text-shadow:0 0 10px rgba(0,240,255,.2),0 0 1px rgba(0,240,255,.08);
+}
+
+.plaintext{
+  font-family:"Lora",serif;
+  font-size:1.15rem;
+  color:#f0eef5;
 }
 
 h1,h2,h3{
   font-family:system-ui,sans-serif;
-  font-weight:700;
-  letter-spacing:.05em;
+  font-weight:800;
+  letter-spacing:.04em;
   text-transform:uppercase;
   color:#00f0ff;
-  text-shadow:0 0 20px rgba(0,240,255,.4),0 0 4px rgba(0,240,255,.2);
-  margin-bottom:1rem;
+  text-shadow:0 0 18px rgba(0,240,255,.35),0 0 3px rgba(0,240,255,.15);
+  margin-bottom:1.25rem;
 }
 
-h1{font-size:2.5rem}
-h2{font-size:1.75rem;color:#ff00a0;text-shadow:0 0 20px rgba(255,0,160,.4)}
+h1{font-size:2.25rem;line-height:1.2}
+h2{font-size:1.5rem;color:#ff00a0;text-shadow:0 0 18px rgba(255,0,160,.35)}
+h3{font-size:1.15rem;color:#ffb7c5;text-shadow:0 0 12px rgba(255,183,197,.3)}
 
 /* ─── Layout ─── */
 .container{
   position:relative;
   z-index:2;
-  max-width:720px;
+  max-width:960px;
   margin:0 auto;
-  padding:3rem 1.5rem;
+  padding:2rem 1.5rem;
 }
 
+/* ─── Cards ─── */
 .card{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(0,240,255,.15);
-  border-radius:18px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(0,240,255,.12);
+  border-radius:16px;
   padding:2rem;
-  margin-bottom:2rem;
-  backdrop-filter:blur(4px);
-  box-shadow:0 8px 32px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.05);
+  margin-bottom:1.5rem;
+  backdrop-filter:blur(6px);
+  box-shadow:0 4px 24px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.04);
   position:relative;
   overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(0,0,0,.35),0 0 20px rgba(0,240,255,.06),inset 0 1px 0 rgba(255,255,255,.06);
 }
 
-.card::before{
+/* Roman accent line */
+.card.roman::after{
   content:"";
   position:absolute;
-  top:-50%;left:-50%;
-  width:200%;height:200%;
-  background:radial-gradient(circle,rgba(255,183,197,.06) 0%,transparent 70%);
-  pointer-events:none;
-}
-
-/* ─── Roman Column Accents ─── */
-.card.roman{
-  border-left:4px solid #c9a227;
-  border-image:linear-gradient(to bottom,#c9a227,#ff00a0) 1;
+  top:0;left:0;
+  width:4px;height:100%;
+  background:linear-gradient(to bottom,#c9a227,#ff00a0);
+  border-radius:16px 0 0 16px;
+  opacity:.8;
 }
 
 /* ─── Kawaii Badges ─── */
 .badge{
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
   background:linear-gradient(135deg,#ffb7c5,#d8b4fe);
-  color:#0a0a0f;
-  font-size:.75rem;
+  color:#0a0a12;
+  font-size:.72rem;
   font-weight:700;
-  padding:.25rem .75rem;
+  padding:.3rem .85rem;
   border-radius:999px;
   margin-bottom:1rem;
   text-shadow:none;
-  box-shadow:0 2px 8px rgba(255,183,197,.3);
+  box-shadow:0 2px 10px rgba(255,183,197,.25);
+  letter-spacing:.02em;
+}
+
+/* ─── Forms ─── */
+input[type="range"]{
+  -webkit-appearance:none;
+  appearance:none;
+  width:100%;
+  height:6px;
+  background:rgba(255,255,255,.08);
+  border-radius:3px;
+  outline:none;
+  margin:1rem 0;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00f0ff,#ff00a0);
+  cursor:pointer;
+  box-shadow:0 0 12px rgba(0,240,255,.4);
+  transition:transform .15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type="range"]::-moz-range-thumb{
+  width:20px;height:20px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00f0ff,#ff00a0);
+  cursor:pointer;
+  border:none;
+  box-shadow:0 0 12px rgba(0,240,255,.4);
+}
+
+textarea{
+  width:100%;
+  background:rgba(0,0,0,.2);
+  border:1px solid rgba(0,240,255,.15);
+  border-radius:12px;
+  padding:1rem;
+  color:#e8e8f0;
+  font-family:"Lora",serif;
+  font-size:1rem;
+  line-height:1.6;
+  resize:vertical;
+  min-height:120px;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+textarea:focus{
+  border-color:rgba(0,240,255,.4);
+  box-shadow:0 0 20px rgba(0,240,255,.1),inset 0 0 10px rgba(0,240,255,.03);
+}
+
+/* ─── Preview Panels ─── */
+.preview-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1.5rem;
+  margin-top:1.5rem;
+}
+.preview-panel{
+  background:rgba(0,0,0,.15);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  padding:1.25rem;
+  min-height:160px;
+}
+.preview-panel h4{
+  font-size:.75rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:rgba(232,232,240,.5);
+  margin-bottom:.75rem;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+}
+.preview-panel .content{
+  white-space:pre-wrap;
+  word-break:break-word;
 }
 
 /* ─── Code / Pre ─── */
 pre,code{
   font-family:"SF Mono",Monaco,Inconsolata,"Fira Code",monospace;
-  font-size:.9rem;
+  font-size:.85rem;
 }
-
 pre{
-  background:rgba(0,0,0,.4);
-  border:1px solid rgba(255,0,160,.2);
-  border-radius:12px;
+  background:rgba(0,0,0,.3);
+  border:1px solid rgba(255,0,160,.15);
+  border-radius:10px;
   padding:1rem;
   overflow-x:auto;
   color:#ffb7c5;
-  box-shadow:inset 0 0 20px rgba(255,0,160,.05);
+  box-shadow:inset 0 0 16px rgba(255,0,160,.04);
 }
 
 /* ─── Links ─── */
 a{
   color:#00f0ff;
   text-decoration:none;
-  border-bottom:1px solid rgba(0,240,255,.3);
+  border-bottom:1px solid rgba(0,240,255,.25);
   transition:all .2s;
 }
 a:hover{
   color:#ffb7c5;
   border-bottom-color:#ffb7c5;
-  text-shadow:0 0 12px rgba(255,183,197,.4);
+  text-shadow:0 0 10px rgba(255,183,197,.3);
 }
 
 /* ─── Buttons ─── */
+.btn-group{
+  display:flex;
+  gap:.75rem;
+  flex-wrap:wrap;
+  margin-top:1.25rem;
+}
 .btn{
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
   background:linear-gradient(135deg,#00f0ff,#ff00a0);
-  color:#0a0a0f;
+  color:#0a0a12;
   font-weight:700;
-  padding:.75rem 1.5rem;
-  border-radius:12px;
+  font-size:.9rem;
+  padding:.65rem 1.25rem;
+  border-radius:10px;
   border:none;
   cursor:pointer;
   text-shadow:none;
-  box-shadow:0 4px 16px rgba(0,240,255,.3);
+  box-shadow:0 4px 14px rgba(0,240,255,.25);
   transition:transform .15s,box-shadow .15s;
 }
 .btn:hover{
   transform:translateY(-2px);
-  box-shadow:0 6px 24px rgba(0,240,255,.4);
+  box-shadow:0 6px 20px rgba(0,240,255,.35);
+}
+.btn.btn-secondary{
+  background:rgba(255,255,255,.06);
+  color:#e8e8f0;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:none;
+}
+.btn.btn-secondary:hover{
+  background:rgba(255,255,255,.1);
+  border-color:rgba(0,240,255,.25);
+  box-shadow:0 0 12px rgba(0,240,255,.1);
+  transform:translateY(-1px);
 }
 
-/* ─── Toggle ─── */
-.raw-mode .cipher{
+/* ─── Shift Display ─── */
+.shift-display{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
   font-family:monospace;
-  color:#ff00a0;
-  text-shadow:0 0 12px rgba(255,0,160,.4);
+  font-size:1.25rem;
+  font-weight:700;
+  color:#00f0ff;
+  text-shadow:0 0 12px rgba(0,240,255,.3);
+  margin-left:.5rem;
 }
+
+/* ─── Stats Row ─── */
+.stats{
+  display:flex;
+  gap:1.5rem;
+  margin-top:1rem;
+  font-size:.85rem;
+  color:rgba(232,232,240,.5);
+}
+.stats span strong{color:#ffb7c5}
 
 /* ─── Footer ─── */
 footer{
   text-align:center;
-  padding:2rem 0;
+  padding:2rem 0 1rem;
   font-size:.8rem;
-  color:rgba(232,230,240,.4);
+  color:rgba(232,232,240,.35);
 }
+footer a{border-bottom:none;color:rgba(232,232,240,.5)}
+footer a:hover{color:#00f0ff}
+
+/* ─── Attribution ─── */
+.attribution{
+  font-size:.75rem;
+  color:rgba(232,232,240,.3);
+  margin-top:1rem;
+  padding-top:1rem;
+  border-top:1px solid rgba(255,255,255,.05);
+}
+.attribution a{color:rgba(232,232,240,.4);border-bottom:none}
+.attribution a:hover{color:#00f0ff}
 
 /* ─── Responsive ─── */
-@media(max-width:600px){
+@media(max-width:720px){
+  .preview-grid{grid-template-columns:1fr}
   h1{font-size:1.75rem}
-  .cipher{font-size:1.1rem}
   .card{padding:1.5rem}
+  .btn-group{justify-content:center}
+}
+
+/* ─── Hero ─── */
+.hero{
+  text-align:center;
+  padding:2rem 0 1rem;
+}
+.hero h1{
+  font-size:3rem;
+  margin-bottom:.5rem;
+}
+.hero p{
+  color:rgba(232,232,240,.6);
+  font-size:1.1rem;
+  max-width:600px;
+  margin:0 auto;
+}
+@media(max-width:720px){
+  .hero h1{font-size:2rem}
 }
