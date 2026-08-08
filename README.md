@@ -1,7 +1,5 @@
 # Caesar Cipher Font
 
-A cyberpunk–Roman–kawaii web experiment where the **font is the decryption key**.
-
 Type a message, pick a Caesar shift (1–25), and generate a custom cipher font. The HTML source is encrypted with your chosen shift. The custom web font reverses that shift inside the browser, rendering readable text from scrambled source code. If you `curl` the page, you see pure nonsense. If you open it in a browser, the message appears.
 
 ## Live Demo
@@ -45,13 +43,6 @@ This creates 25 subset WOFF2 fonts (shifts 1–25) in `docs/assets/fonts/`. Each
 2. Go to **Settings → Pages** and set the source to the `/docs` folder on the `main` branch.
 3. Visit `https://christopherwoodall.github.io/caesar-font/` for the generator and `/demo.html` for the demo.
 
-## Aesthetic
-
-- **Cyberpunk**: dark base, neon cyan & magenta accents, subtle grid overlay
-- **Roman**: classical serif body text (Lora), gold column accents
-- **Kawaii**: soft pastel pink/lavender badges, rounded corners, subtle glows
-- **Readable**: high contrast, clear hierarchy, no clutter
-
 ## Font Attribution
 
 This project uses **Lora**, a typeface designed by Cyreal and licensed under the [SIL Open Font License 1.1](https://scripts.sil.org/OFL). The original font is available at [Google Fonts](https://fonts.google.com/specimen/Lora).
@@ -59,4 +50,3 @@ This project uses **Lora**, a typeface designed by Cyreal and licensed under the
 ## License
 
 The source code is MIT. The original Lora font remains under the SIL Open Font License.
-
