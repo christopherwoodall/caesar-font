@@ -192,6 +192,51 @@ def generate_preview_image(font_path: Path, dest: Path) -> None:
     print(f"Preview image saved to {dest} ({dest.stat().st_size:,} bytes)")
 
 
+def generate_favicon(font_path: Path, favicon_dest: Path, touch_dest: Path) -> None:
+    """Generate favicon.png (32x32) and apple-touch-icon.png (180x180)."""
+    from PIL import Image, ImageDraw, ImageFont
+
+    bg = "#0a0a12"
+    cyan = "#00f0ff"
+
+    # 32x32 favicon
+    img32 = Image.new("RGB", (32, 32), bg)
+    draw32 = ImageDraw.Draw(img32)
+    try:
+        fnt32 = ImageFont.truetype(str(font_path), 24)
+    except Exception:
+        fnt32 = ImageFont.load_default()
+    bbox = draw32.textbbox((0, 0), "C", font=fnt32)
+    tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
+    tx = (32 - tw) // 2
+    ty = (32 - th) // 2 - 1
+    draw32.text((tx, ty), "C", font=fnt32, fill=cyan)
+    img32.save(str(favicon_dest), "PNG")
+    print(f"Favicon saved to {favicon_dest} ({favicon_dest.stat().st_size:,} bytes)")
+
+    # 180x180 touch icon
+    img180 = Image.new("RGB", (180, 180), bg)
+    draw180 = ImageDraw.Draw(img180)
+    try:
+        fnt180 = ImageFont.truetype(str(font_path), 140)
+    except Exception:
+        fnt180 = ImageFont.load_default()
+    bbox = draw180.textbbox((0, 0), "C", font=fnt180)
+    tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
+    tx = (180 - tw) // 2
+    ty = (180 - th) // 2 - 3
+    # Glow effect
+    for offset in range(6, 0, -1):
+        alpha = int(20 - offset * 3)
+        glow = (0, max(0, 240 - alpha), 255 - alpha)
+        draw180.text((tx, ty), "C", font=fnt180, fill=glow)
+    draw180.text((tx, ty), "C", font=fnt180, fill=cyan)
+    img180.save(str(touch_dest), "PNG")
+    print(f"Touch icon saved to {touch_dest} ({touch_dest.stat().st_size:,} bytes)")
+
+
 def main() -> None:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     ASSETS_DIR.mkdir(parents=True, exist_ok=True)
@@ -220,6 +265,10 @@ def main() -> None:
     # Generate preview image using the static TTF (better for Pillow)
     print("\nGenerating social preview image...")
     generate_preview_image(raw_static, ASSETS_DIR / "preview.png")
+
+    # Generate favicons
+    print("\nGenerating favicons...")
+    generate_favicon(raw_static, ASSETS_DIR / "favicon.png", ASSETS_DIR / "apple-touch-icon.png")
 
     print("\nBuild complete!")
 
